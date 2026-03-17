@@ -243,6 +243,14 @@
       gap: 10px 14px;
     }
 
+    @keyframes toy-wiggle {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(-1.5deg); }
+      50% { transform: rotate(1.5deg); }
+      75% { transform: rotate(-1deg); }
+      100% { transform: rotate(0deg); }
+    }
+
     .tally-group {
       position: relative;
       width: 66px;
@@ -425,26 +433,28 @@
       background: linear-gradient(180deg, #ffb347, #f47c20);
       color: #fffaf2;
       box-shadow:
-      0 5px 0 #d95e1d,
-      0 8px 14px rgba(244, 124, 32, 0.22);
+        0 5px 0 #d95e1d,
+        0 8px 14px rgba(244, 124, 32, 0.22);
       font-weight: 900;
       font-size: 15px;
       letter-spacing: 0.5px;
-      position: relative;
-    }
+
+      animation: toy-wiggle 3.2s ease-in-out infinite;
+    }         
 
     .eraser-btn {
       width: 56px;
-    height: 44px;
-    border: none;
-    border-radius: 14px;
-    background: linear-gradient(180deg, #ffe7d6, #f3d4c3);
-    box-shadow:
-    0 5px 0 #bf9b89,
-    0 8px 14px rgba(0, 0, 0, 0.12);
-    position: relative;
-    flex-shrink: 0;
+      height: 44px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #ffe7d6, #f3d4c3);
+      box-shadow:
+        0 5px 0 #bf9b89,
+        0 8px 14px rgba(0, 0, 0, 0.12);
+      position: relative;
+      flex-shrink: 0;
 
+      animation: toy-wiggle 4s ease-in-out infinite;
     }
 
     .eraser-btn::before {
@@ -461,15 +471,18 @@
     }
 
     .eraser-btn::after {
-      content: "";
+      content: "✨";
       position: absolute;
-      width: 28px;
-      height: 12px;
-      left: 50%;
-      top: 21px;
-      transform: translateX(-50%) rotate(-12deg);
-      background: #fffaf5;
-      border-radius: 0 0 5px 5px;
+      right: -8px;
+      top: -6px;
+      font-size: 14px;
+      opacity: 0.8;
+      animation: sparkle 2s infinite;
+    }
+    @keyframes sparkle {
+    0% { transform: scale(0.7); opacity: 0.4; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(0.7); opacity: 0.4; }
     }
     .eraser-btn:active {
     transform: translateY(4px);
@@ -480,8 +493,7 @@
 
     .todo-add-btn:hover,
     .eraser-btn:hover {
-      transform: translateY(2px) rotate(3deg);
-
+      transform: scale(1.05);
     } 
     todo-add-btn::before {
     content: "✦";
@@ -490,10 +502,7 @@
 
     }
     .todo-add-btn:active {
-  transform: translateY(4px);
-  box-shadow:
-    0 2px 0 #d95e1d,
-    0 4px 8px rgba(244, 124, 32, 0.18);
+  transform: translateY(4px) scale(0.95);
     }
 
     .todo-list {
