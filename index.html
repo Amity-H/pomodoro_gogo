@@ -10,14 +10,14 @@
       box-sizing: border-box;
     }
 
-    html,
-    body {
+    html, body {
       width: 100%;
       height: 100%;
       margin: 0;
     }
 
     body {
+      min-height: 100vh;
       background:
         radial-gradient(circle at 20% 20%, rgba(255,255,255,0.22), transparent 18%),
         radial-gradient(circle at 80% 30%, rgba(255,255,255,0.12), transparent 20%),
@@ -27,33 +27,8 @@
       overflow: hidden;
     }
 
-    .stage {
-      width: 100vw;
-      height: 100vh;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .app-scale {
-      --design-width: 1200;
-      --design-height: 800;
-      --scale: min(
-        calc(100vw / var(--design-width)),
-        calc(100vh / var(--design-height))
-      );
-
-      width: calc(var(--design-width) * 1px);
-      height: calc(var(--design-height) * 1px);
-
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%) scale(var(--scale));
-      transform-origin: center center;
-    }
-
     .timer-card {
-      width: 520px;
+      width: min(520px, 92vw);
       min-height: 460px;
       padding: 40px 32px 28px;
       border-radius: 28px;
@@ -69,6 +44,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      z-index: 2;
     }
 
     .timer-card::before {
@@ -105,7 +81,7 @@
       border: 4px solid #f47c20;
       background: #4a3526;
       color: #fff2a8;
-      font-size: 120px;
+      font-size: 110px;
       font-weight: bold;
       letter-spacing: 6px;
       line-height: 1;
@@ -162,6 +138,7 @@
         inset 0 -3px 10px rgba(70, 35, 10, 0.18);
       color: #4e2f12;
       overflow: hidden;
+      z-index: 3;
       background:
         linear-gradient(
           90deg,
@@ -369,6 +346,7 @@
         inset 0 1px 0 rgba(255,255,255,0.04),
         inset 0 0 30px rgba(255,255,255,0.03);
       overflow: hidden;
+      z-index: 3;
     }
 
     .chalk-board::before {
@@ -454,6 +432,7 @@
 
     .todo-add-btn {
       padding: 10px 16px;
+      border: none;
       border-radius: 999px;
       background: linear-gradient(180deg, #ffb347, #f47c20);
       color: #fffaf2;
@@ -466,15 +445,25 @@
       animation: toy-wiggle 3.2s ease-in-out infinite;
     }
 
+    .todo-add-btn:hover,
+    .eraser-btn:hover {
+      transform: scale(1.05);
+    }
+
     .todo-add-btn::before {
       content: "✦";
       margin-right: 6px;
       color: #fff4c7;
     }
 
+    .todo-add-btn:active {
+      transform: translateY(4px) scale(0.95);
+    }
+
     .eraser-btn {
       width: 56px;
       height: 44px;
+      border: none;
       border-radius: 14px;
       background: linear-gradient(180deg, #ffe7d6, #f3d4c3);
       box-shadow:
@@ -519,15 +508,6 @@
       box-shadow:
         0 2px 0 #bf9b89,
         0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .todo-add-btn:hover,
-    .eraser-btn:hover {
-      transform: scale(1.05);
-    }
-
-    .todo-add-btn:active {
-      transform: translateY(4px) scale(0.95);
     }
 
     .todo-list {
@@ -674,50 +654,93 @@
         transform: translateX(0);
       }
     }
+
+    @media (max-width: 900px) {
+      body {
+        overflow: auto;
+        padding: 16px;
+      }
+
+      .wood-board,
+      .chalk-board,
+      .timer-card {
+        position: relative;
+        left: auto;
+        right: auto;
+        top: auto;
+        bottom: auto;
+        transform: none;
+        margin: 0 auto 16px;
+      }
+
+      .wood-board {
+        width: min(100%, 280px);
+      }
+
+      .chalk-board {
+        width: min(100%, 340px);
+        min-height: 320px;
+      }
+
+      .timer-card {
+        width: min(100%, 520px);
+        min-height: auto;
+      }
+
+      h1 {
+        font-size: 56px;
+      }
+
+      .clock {
+        min-height: 130px;
+        font-size: 72px;
+        letter-spacing: 3px;
+      }
+
+      .hint {
+        font-size: 18px;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="stage">
-    <div class="app-scale">
-      <div class="wood-board">
-        <span class="pin"></span>
-        <span class="pin-right"></span>
+  <div class="wood-board">
+    <span class="pin"></span>
+    <span class="pin-right"></span>
 
-        <div class="board-title">Today's Count</div>
-        <div class="board-date" id="todayDate"></div>
-        <div class="tally-box" id="tallyBox"></div>
-        <button class="board-btn" id="addTallyBtn">+ Add One</button>
-      </div>
+    <div class="board-title">Today's Count</div>
+    <div class="board-date" id="todayDate"></div>
+    <div class="tally-box" id="tallyBox"></div>
+    <button class="board-btn" id="addTallyBtn">+ Add One</button>
+  </div>
 
-      <div class="chalk-board">
-        <span class="chalk-pin"></span>
-        <span class="chalk-pin-right"></span>
+  <div class="chalk-board">
+    <span class="chalk-pin"></span>
+    <span class="chalk-pin-right"></span>
 
-        <div class="chalk-title">Today's List</div>
+    <div class="chalk-title">Today's List</div>
 
-        <div class="todo-input-row">
-          <input
-            id="todoInput"
-            class="todo-input"
-            type="text"
-            placeholder="Write something here..."
-            maxlength="60"
-          />
-          <button id="todoAddBtn" class="todo-add-btn">Add</button>
-          <button id="eraseAllBtn" class="eraser-btn" title="Erase all"></button>
-        </div>
+    <div class="todo-input-row">
+      <input
+        id="todoInput"
+        class="todo-input"
+        type="text"
+        placeholder="Write something here..."
+        maxlength="60"
+      />
+      <button id="todoAddBtn" class="todo-add-btn">Add</button>
+      <button id="eraseAllBtn" class="eraser-btn" title="Erase all"></button>
+    </div>
 
-        <ul id="todoList" class="todo-list"></ul>
-      </div>
+    <ul id="todoList" class="todo-list"></ul>
+  </div>
 
-      <div class="timer-card">
-        <h1>Pomodoro</h1>
-        <div class="clock" id="clock">25:00</div>
-        <button class="btn" id="controlBtn">Start</button>
-        <div class="hint">
-          Make it Fun, and Do it For FUN.
-        </div>
-      </div>
+  <div class="timer-card">
+    <h1>Pomodoro</h1>
+    <div class="clock" id="clock">25:00</div>
+    <button class="btn" id="controlBtn">Start</button>
+    <div class="hint">
+      Make it Fun, and Do it For FUN.
     </div>
   </div>
 
@@ -805,9 +828,12 @@
         const t = document.createElement("div");
         t.className = "tomato-rain";
         t.innerText = "🍅";
+
         t.style.left = Math.random() * window.innerWidth + "px";
         t.style.animationDelay = Math.random() * 0.5 + "s";
+
         document.body.appendChild(t);
+
         setTimeout(() => t.remove(), 2000);
       }
     }
@@ -874,6 +900,7 @@
       clock.textContent = "00:00";
       controlBtn.textContent = "Reset";
       addTally();
+
       tomatoRain();
       showNotification();
       alert("時間到囉！休息一下 🍅");
@@ -1038,6 +1065,7 @@
 
     controlBtn.addEventListener("click", toggleTimer);
     addTallyBtn.addEventListener("click", addTally);
+
     todoAddBtn.addEventListener("click", addTodo);
     eraseAllBtn.addEventListener("click", eraseAllTodos);
 
